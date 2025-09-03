@@ -1,1 +1,1 @@
-# include anything resources for clasp410 and projects 
+# include anything resources for clasp410:projects, lecture notes, labs 
