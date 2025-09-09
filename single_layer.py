@@ -47,7 +47,7 @@ def compare_warming():
     fig, ax=plt.subplots(1,1,figsize=(8,8))
 
     ax.plot(year, t_obs, label ="Observed Temperature Change") 
-    ax.plot(year, t_model, label ="Ppredicted Temperature Change")
+    ax.plot(year, t_model, label ="Predicted Temperature Change")
 
     ax.legend(loc='best')
     ax.set_xlabel('Year')
