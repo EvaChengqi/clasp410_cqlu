@@ -15,7 +15,7 @@ plt.style.use('fivethirtyeight')
 # physical constants
 sigma=5.67e-8 #Stefan-Boltzmann constant, units: W/m2/K−4
 
-def n_layer_atoms(nlayers, epsilon =1, albedo = 0.33, s0=1350):
+def n_layer_atoms(nlayers, epsilon =1, albedo = 0.33, s0=1350, debug=False):
     '''
 
     '''
@@ -26,11 +26,18 @@ def n_layer_atoms(nlayers, epsilon =1, albedo = 0.33, s0=1350):
     # Populate based on our model:
     for i in range(nlayers+1):
         for j in range(nlayers+1):
-            A[i, j] = # What math should go here?
+            if i==j:
+                A[i,j] = -2 + 1*(j==0)
+            else:
+                A[i,j] = epsilon**(i>0) *(1-epsilon)**(np.abs(j-i)-1)
 
-    b = # What should go here?
+    if debug: 
+        print(A)
+
+    b[0] = -.25 * s0 *(1-albedo) # What should go here?
 
     # Invert matrix:
     Ainv = np.linalg.inv(A)
     # Get solution:
     fluxes = np.matmul(Ainv, b) # Note our use of matrix multiplication!
+
