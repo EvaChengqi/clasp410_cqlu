@@ -90,51 +90,50 @@ def n_layer_atoms(nlayers, epsilon =.1, albedo = 0.33, s0=1350, debug=False):
 
 
 # Question 3, experiments 1
-# #Graph of surface temperature versus emissivity
-# epsilon_values = np.linspace(0.01, 1, 100) 
-# surface_temps = [n_layer_atoms(nlayers=1, epsilon=e, s0=1350)[0] for e in epsilon_values]
+#Graph of surface temperature versus emissivity
+epsilon_values = np.linspace(0.01, 1, 100) 
+surface_temps = [n_layer_atoms(nlayers=1, epsilon=e, s0=1350)[0] for e in epsilon_values]
 
-# # Finding the emissivity corresponding to the temperature closest to 288K
-# target_temp = 288
-# closest_temp_idx = np.abs(np.array(surface_temps) - target_temp).argmin()
-# predicted_epsilon = epsilon_values[closest_temp_idx]
-# predicted_temp = surface_temps[closest_temp_idx]
+# Finding the emissivity corresponding to the temperature closest to 288K
+target_temp = 288
+closest_temp_idx = np.abs(np.array(surface_temps) - target_temp).argmin()
+predicted_epsilon = epsilon_values[closest_temp_idx]
+predicted_temp = surface_temps[closest_temp_idx]
 
-# plt.figure(figsize=(10, 6))
-# plt.plot(epsilon_values, surface_temps, color='blue', linewidth=2, label='Model Prediction')
-# plt.scatter([predicted_epsilon], [predicted_temp], color='red', s=100, zorder=5, label=f'Predicted Point ({predicted_epsilon:.2f}, {predicted_temp:.2f}K)')
-# plt.axhline(y=target_temp, color='gray', linestyle='--', linewidth=1, label=f'Target Temp ({target_temp}K)')
-# plt.axvline(x=predicted_epsilon, color='gray', linestyle='--', linewidth=1)
-# plt.text(0.1, 288, f'  Target: 288K', verticalalignment='bottom', horizontalalignment='left', color='black', fontsize=12)
-# plt.text(predicted_epsilon, 240, f'ε ≈ {predicted_epsilon:.2f}', verticalalignment='bottom', horizontalalignment='right', color='black', fontsize=12)
+plt.figure(figsize=(10, 6))
+plt.plot(epsilon_values, surface_temps, color='blue', linewidth=2, label='Model Prediction')
+plt.scatter([predicted_epsilon], [predicted_temp], color='red', s=100, zorder=5, label=f'Predicted Point ({predicted_epsilon:.2f}, {predicted_temp:.2f}K)')
+plt.axhline(y=target_temp, color='gray', linestyle='--', linewidth=1, label=f'Target Temp ({target_temp}K)')
+plt.axvline(x=predicted_epsilon, color='gray', linestyle='--', linewidth=1)
+plt.text(0.1, 288, f'  Target: 288K', verticalalignment='bottom', horizontalalignment='left', color='black', fontsize=12)
+plt.text(predicted_epsilon, 240, f'ε ≈ {predicted_epsilon:.2f}', verticalalignment='bottom', horizontalalignment='right', color='black', fontsize=12)
 
 
-# plt.xlabel('Emissivity (ε)')
-# plt.ylabel('Surface Temperature (K)')
-# plt.title('Surface Temperature vs. Emissivity for a Single-Layer Atmosphere')
-# plt.legend()
-# plt.grid(True)
-# plt.tight_layout()
-# plt.show()
+plt.xlabel('Emissivity (ε)')
+plt.ylabel('Surface Temperature (K)')
+plt.title('Surface Temperature vs. Emissivity for a Single-Layer Atmosphere')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
 
-# print("Experiments 1: \n")
-# print(f"For a surface temperature of 288K, the model predicts an atmospheric emissivity of approximately {predicted_epsilon:.2f}.")
-# print("\n")
+print("Experiments 1: \n")
+print(f"For a surface temperature of 288K, the model predicts an atmospheric emissivity of approximately {predicted_epsilon:.2f}.")
+print("\n")
 
 
 
 # Question 3, experiments 2
-#num_layers = [1, 2, 3, 4, 5, 6, 7, 8,9,10,11, 12, 13, 14]
-# num_layers = np.arange(1, 101, 1) 
-# surface_temps = [n_layer_atoms(nlayers=n, epsilon=0.255, s0=1350)[0] for n in num_layers]
+num_layers = np.arange(1, 101, 1) 
+surface_temps = [n_layer_atoms(nlayers=n, epsilon=0.255, s0=1350)[0] for n in num_layers]
 
-# plt.figure(figsize=(10, 6))
-# plt.plot(num_layers, surface_temps, color='green', marker='o', linestyle='-', linewidth=2)
-# plt.xlabel('Number of Layers')
-# plt.ylabel('Surface Temperature (K)')
-# plt.title('Surface Temperature vs. Number of Layers (ε = 0.255)')
-# plt.grid(True)
-# plt.show()
+plt.figure(figsize=(10, 6))
+plt.plot(num_layers, surface_temps, color='green', marker='o', linestyle='-', linewidth=2)
+plt.xlabel('Number of Layers')
+plt.ylabel('Surface Temperature (K)')
+plt.title('Surface Temperature vs. Number of Layers (ε = 0.255)')
+plt.grid(True)
+plt.show()
 
 
 
@@ -150,3 +149,60 @@ plt.title('Venus Surface Temperature vs. Number of Layers (ε = 1)')
 plt.grid(True)
 plt.show()
 
+
+
+
+# Question 5 
+def nuclear_winter_atoms(nlayers, epsilon = 0.5, albedo = 0.33, s0=1350, debug=False):
+    '''
+    Solve the N-layer model for a nuclear winter scenario.
+    Solar flux is completely absorbed by the topmost layer.
+    '''
+    A = np.zeros([nlayers+1, nlayers+1])
+    b = np.zeros(nlayers+1)
+
+    for i in range(nlayers+1):
+        for j in range(nlayers+1):
+            if i==j:
+                A[i,j] = -2 + 1*(j==0)
+            else:
+                A[i,j] = epsilon**(i>0) * (1-epsilon)**(np.abs(j-i)-1)
+
+    # Nuclear winter modification:
+    # No solar flux reaches the surface (b[0] = 0)
+    b[0] = 0.0
+    # All solar flux is absorbed by the topmost layer (b[nlayers])
+    b[nlayers] = -.25 * s0 *(1-albedo)
+
+    if debug: 
+        print(A)
+
+    Ainv = np.linalg.inv(A)
+    fluxes = np.matmul(Ainv, b)
+
+    temps = np.zeros(nlayers + 1)
+    
+    temps[0] = np.power(fluxes[0] / sigma, 1/4)
+    temps[1:] = np.power(fluxes[1:] / (sigma * epsilon), 1/4)
+
+    return temps
+
+# Run the nuclear winter simulation
+# Using 5 layers, emissivity of 0.5, and solar constant s0 = 1350W/m2
+temps_nuclear_winter = nuclear_winter_atoms(nlayers=5, epsilon=0.5, s0=1350, albedo=0.33)
+
+# Print the surface temperature
+print(f"The resulting surface temperature under a nuclear winter scenario is: {temps_nuclear_winter[0]:.2f} K")
+
+# Plot the altitude-temperature profile
+altitudes = np.arange(0, 5 + 1, 1)
+
+plt.figure(figsize=(8, 6))
+plt.plot(temps_nuclear_winter, altitudes, color='darkred', marker='o', linestyle='-')
+plt.xlabel('Temperature (K)', fontsize=14)
+plt.ylabel('Altitude (Number of Layers)', fontsize=14)
+plt.title('Temperature Profile Under Nuclear Winter (5 Layers, ε=0.5)', fontsize=16)
+plt.grid(True)
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()
