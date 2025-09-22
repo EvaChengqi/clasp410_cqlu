@@ -132,6 +132,7 @@ plt.plot(num_layers, surface_temps, color='green', marker='o', linestyle='-', li
 plt.xlabel('Number of Layers')
 plt.ylabel('Surface Temperature (K)')
 plt.title('Surface Temperature vs. Number of Layers (ε = 0.255)')
+plt.tight_layout()
 plt.grid(True)
 plt.show()
 
@@ -146,6 +147,7 @@ plt.plot(num_layers, surface_temps, color='blue', marker='o', linestyle='-', lin
 plt.xlabel('Number of Layers')
 plt.ylabel('Venus Surface Temperature (K)')
 plt.title('Venus Surface Temperature vs. Number of Layers (ε = 1)')
+plt.tight_layout()
 plt.grid(True)
 plt.show()
 
@@ -195,14 +197,14 @@ temps_nuclear_winter = nuclear_winter_atoms(nlayers=5, epsilon=0.5, s0=1350, alb
 print(f"The resulting surface temperature under a nuclear winter scenario is: {temps_nuclear_winter[0]:.2f} K")
 
 # Plot the altitude-temperature profile
-altitudes = np.arange(0, 5 + 1, 1)
+nu_num_layers = np.arange(1, 101, 1) 
+nu_surface_temps = [n_layer_atoms(nlayers=n, epsilon=0.5, s0=1350)[0] for n in num_layers]
 
-plt.figure(figsize=(8, 6))
-plt.plot(temps_nuclear_winter, altitudes, color='darkred', marker='o', linestyle='-')
-plt.xlabel('Temperature (K)', fontsize=14)
-plt.ylabel('Altitude (Number of Layers)', fontsize=14)
-plt.title('Temperature Profile Under Nuclear Winter (5 Layers, ε=0.5)', fontsize=16)
+plt.figure(figsize=(10, 6))
+plt.plot(nu_num_layers, nu_surface_temps, color='red', marker='o', linestyle='-', linewidth=2)
+plt.xlabel('Number of Atmospheric Layers')
+plt.ylabel('Nuclear Winter Earth Surface Temperature (K)')
+plt.title('Nuclear Winter Temperature Profile (ε=0.5)')
 plt.grid(True)
-plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.show()
