@@ -140,7 +140,7 @@ plt.show()
 
 # Question 4, planet Venus
 num_layers = np.arange(1, 101, 1) 
-surface_temps = [n_layer_atoms(nlayers=n, epsilon=1, s0=2600)[0] for n in num_layers]
+surface_temps = [n_layer_atoms(nlayers=n, epsilon=1, albedo = 0.8, s0=2600)[0] for n in num_layers]
 
 plt.figure(figsize=(10, 6))
 plt.plot(num_layers, surface_temps, color='blue', marker='o', linestyle='-', linewidth=2)
