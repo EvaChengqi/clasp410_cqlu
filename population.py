@@ -16,8 +16,6 @@ plt.style.use("seaborn-v0_8")
 
 
 ## Derivative functions
-
-
 def dNdt_comp(t, N, a=1, b=2, c=1, d=3):
     """
     Competition model ODEs. Two species competing.
@@ -91,8 +89,6 @@ def euler_solve(func, N1_init=0.3, N2_init=0.6, dT=0.1, t_final=100.0, a=1, b=2,
 
 
 ## RK8 solver
-
-
 def solve_rk8(func, N1_init=0.3, N2_init=0.6, dT=10, t_final=100.0, a=1, b=2, c=1, d=3):
     """
     RK8 solver (DOP853, adaptive step). Models smoother populations and takes smaller steps when necessary.
@@ -115,6 +111,9 @@ def solve_rk8(func, N1_init=0.3, N2_init=0.6, dT=10, t_final=100.0, a=1, b=2, c=
 
 
 ## LAB QUESTIONS 
+#!!!!!!!! When working on a specific question, 
+#!!!!!!!! comment out all code related to the other questions.
+
 
 # # Question 1, reporduce 
 a, b, c, d = 1, 2, 1, 3
@@ -197,8 +196,8 @@ plt.show()
 
 # Question 2: Uncomment to see all the graphs 
 # uncomment this to get the first tryout 
-initial_conditions = [(0.1,0.1), (0.3,0.6), (0.6,0.3)] 
-coefficients = [(1,2,1,3), (1.5,1,1,2), (1,3,1,1)]
+# initial_conditions = [(0.1,0.1), (0.3,0.6), (0.6,0.3)] 
+# coefficients = [(1,2,1,3), (1.5,1,1,2), (1,3,1,1)]
 
 # uncomment this to get the figure reach to equilibrium
 # initial_conditions = [(0.3,0.3)]
@@ -257,39 +256,38 @@ plt.show()
 # initial_conditions = [(0.5, 0.2)]
 # coefficients = [(1, 0.3, 0.5, 0.4), (1, 0.3, 0.5, 0.6),(1, 0.3, 0.5, 0.8)]
 
+colors = itertools.cycle(['blue', 'red', 'green', 'orange', 'purple', 'brown'])
 
-# colors = itertools.cycle(['blue', 'red', 'green', 'orange', 'purple', 'brown'])
+plt.figure(figsize=(12,6))
+for N1_init, N2_init in initial_conditions:
+    for a,b,c,d in coefficients:
+        t, N1, N2 = solve_rk8(dNdt_predprey, N1_init, N2_init, dT=0.01, t_final=100, a=a, b=b, c=c, d=d)
+        color1 = next(colors)
+        color2 = next(colors)
+        plt.plot(t, N1, color=color1, alpha=0.7,
+                 label=f"Prey init=({N1_init},{N2_init}) coef=({a},{b},{c},{d})")
+        plt.plot(t, N2, color=color2, alpha=0.7,
+                 label=f"Predator init=({N1_init},{N2_init}) coef=({a},{b},{c},{d})")
 
-# plt.figure(figsize=(12,6))
-# for N1_init, N2_init in initial_conditions:
-#     for a,b,c,d in coefficients:
-#         t, N1, N2 = solve_rk8(dNdt_predprey, N1_init, N2_init, dT=0.01, t_final=100, a=a, b=b, c=c, d=d)
-#         color1 = next(colors)
-#         color2 = next(colors)
-#         plt.plot(t, N1, color=color1, alpha=0.7,
-#                  label=f"Prey init=({N1_init},{N2_init}) coef=({a},{b},{c},{d})")
-#         plt.plot(t, N2, color=color2, alpha=0.7,
-#                  label=f"Predator init=({N1_init},{N2_init}) coef=({a},{b},{c},{d})")
-
-# plt.xlabel("Time (years)")
-# plt.ylabel("Population")
-# plt.title("Predator-Prey Dynamics (Time Series)")
-# plt.legend(fontsize=8, loc='upper right')
-# plt.tight_layout()
-# plt.show()
+plt.xlabel("Time (years)")
+plt.ylabel("Population")
+plt.title("Predator-Prey Dynamics (Time Series)")
+plt.legend(fontsize=8, loc='upper right')
+plt.tight_layout()
+plt.show()
 
 
-# plt.figure(figsize=(8,6))
-# for N1_init, N2_init in initial_conditions:
-#     for a,b,c,d in coefficients:
-#         t, N1, N2 = solve_rk8(dNdt_predprey, N1_init, N2_init, dT=0.01, t_final=100, a=a, b=b, c=c, d=d)
-#         color1 = next(colors)
-#         plt.plot(N1, N2, color=color1, alpha=0.7,
-#                  label=f"init=({N1_init},{N2_init}) coef=({a},{b},{c},{d})")
+plt.figure(figsize=(8,6))
+for N1_init, N2_init in initial_conditions:
+    for a,b,c,d in coefficients:
+        t, N1, N2 = solve_rk8(dNdt_predprey, N1_init, N2_init, dT=0.01, t_final=100, a=a, b=b, c=c, d=d)
+        color1 = next(colors)
+        plt.plot(N1, N2, color=color1, alpha=0.7,
+                 label=f"init=({N1_init},{N2_init}) coef=({a},{b},{c},{d})")
 
-# plt.xlabel("Prey Population (N1)")
-# plt.ylabel("Predator Population (N2)")
-# plt.title("Predator-Prey Phase Diagram")
-# plt.legend(fontsize=8)
-# plt.tight_layout()
-# plt.show()
+plt.xlabel("Prey Population (N1)")
+plt.ylabel("Predator Population (N2)")
+plt.title("Predator-Prey Phase Diagram")
+plt.legend(fontsize=8)
+plt.tight_layout()
+plt.show()
