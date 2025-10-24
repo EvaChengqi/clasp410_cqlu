@@ -128,7 +128,7 @@ def solve_heat(xstop=1, tstop=0.2, dx=0.2, dt=0.02, c2=1, lowerbound=0,
     return t, x, U
 
 
-def heatmap_figure1(year=300):
+def heatmap_figure1(year=120):
     xstop = 100.0 
     tstop = year * 365 * 24 * 3600   
     dx = 1.0     
@@ -156,7 +156,7 @@ def heatmap_figure1(year=300):
     plt.show()
 
 
-def Seasonal_figure_2(year=300):
+def Seasonal_figure_2(year=120):
     xstop = 100.0 
     tstop = year * 365 * 24 * 3600   # Simulate 300 years
     dx = 1.0     
@@ -270,7 +270,7 @@ def run_permafrost_sim(temp_shift=0):
 
     # ----- Set spatial and temporal parameters -----
     xstop = 100.0                 # maximum depth (m)
-    tstop = 300 * 365 * 24 * 3600 # simulate 300 years in seconds
+    tstop = 120 * 365 * 24 * 3600 # simulate 300 years in seconds
     dx = 1.0                       # spatial resolution (m)
     c2 = 2.5e-7                    # thermal diffusivity squared (m^2/s)
     dt = (dx**2 / (2*c2)) / 1.1    # stable time step using CFL criterion
