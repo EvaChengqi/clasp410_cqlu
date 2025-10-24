@@ -98,7 +98,7 @@ def solve_heat(xstop=1, tstop=0.2, dx=0.2, dt=0.02, c2=1, lowerbound=0,
 
     # Create solution matrix; set initial conditions (Hardcoded to 0°C)
     U = np.zeros([M, N])
-    #U[:, 0] = 4*x - 4*x**2
+    # U[:, 0] = 4*x - 4*x**2
 
     # Get our "r" coeff:
     r = c2 * (dt/dx**2)
@@ -128,9 +128,9 @@ def solve_heat(xstop=1, tstop=0.2, dx=0.2, dt=0.02, c2=1, lowerbound=0,
     return t, x, U
 
 
-def heatmap_figure1():
+def heatmap_figure1(year=300):
     xstop = 100.0 
-    tstop = 300 * 365 * 24 * 3600   
+    tstop = year * 365 * 24 * 3600   
     dx = 1.0     
     c2 = 2.5e-7 # 7.889 m^2/year
 
@@ -156,9 +156,9 @@ def heatmap_figure1():
     plt.show()
 
 
-def Seasonal_figure_2():
+def Seasonal_figure_2(year=300):
     xstop = 100.0 
-    tstop = 300 * 365 * 24 * 3600   # Simulate 300 years
+    tstop = year * 365 * 24 * 3600   # Simulate 300 years
     dx = 1.0     
     c2 = 2.5e-7  # Thermal diffusivity (m²/s)
 
