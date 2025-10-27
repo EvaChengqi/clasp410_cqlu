@@ -15,7 +15,7 @@ def temp_kanger(t):
     '''
     t_amp = (t_kanger - t_kanger.mean()).max()
     return t_amp*np.sin(np.pi/180 * t - np.pi/2) + t_kanger.mean()
-
+ 
 
 def solve_heat(xstop=1, tstop=0.2, dx=0.2, dt=0.02, c2=1, lowerbound=0,
                upperbound=0):
@@ -87,6 +87,13 @@ def solve_heat(xstop=1, tstop=0.2, dx=0.2, dt=0.02, c2=1, lowerbound=0,
     dt_max = dx**2 / (2*c2)
     if dt > dt_max:
         warnings.warn(f'Stability criterion is not met: dt={dt} > dt_max={dt_max}. Solution will be unstable.')
+
+
+# NOTE : ADDITION HERE
+  # If stable, print confirmation for user transparency and debugging clarity
+    else:
+         print(f"Stable simulation: dt={dt:.2e} ≤ dt_max={dt_max:.2e}")
+
 
     # Get grid sizes (plus one to include "0" as well.)
     N = int(tstop / dt) + 1
