@@ -198,6 +198,22 @@ def pspread_stimulate():
     for pspread in pspread_values:
         forest = forest_fire(isize, jsize, nstep, pspread, pignite, pbare)
 
+
+        ksize, isize, jsize = forest.shape
+        npoints = isize * jsize
+        forested = 100 * (forest == 2).sum(axis=(1, 2)) / npoints
+
+        stabilized = False
+        stable_step = None
+        for t in range(1, len(forested)):
+            if abs(forested[t] - forested[t - 1]) < 0.01:
+                stabilized = True
+                stable_step = t
+                break
+
+
+        print(f"{pspread:7.2f} | {forested[-1]:17.2f}% | ")
+        
         plt.figure(figsize=(8, 5))   
         plot_progression(forest) 
 
@@ -215,7 +231,22 @@ def pbare_stimulate():
 
     for pbare in pbare_values:
         forest = forest_fire(isize, jsize, nstep, pspread, pignite, pbare)
-        
+
+        ksize, isize, jsize = forest.shape
+        npoints = isize * jsize
+        forested = 100 * (forest == 2).sum(axis=(1, 2)) / npoints
+        stabilized = False
+        stable_step = None
+        for t in range(1, len(forested)):
+            diff = abs(forested[t] - forested[t - 1])
+            if diff < 0.01:
+                stabilized = True
+                stable_step = t
+                break  
+
+        print(f"{pbare:5.2f} | {forested[-1]:17.2f}% | ")
+
+    
         plt.figure(figsize=(8, 5))  
         plot_progression(forest)     
 
@@ -225,7 +256,6 @@ def pbare_stimulate():
         plt.ylabel('Percent Total Forest')
         plt.tight_layout()
         plt.show()                  
-
 
 
 def disease_spread(isize=3, jsize=3, nstep=4, pspread=1.0, pignite=0.02, pbare=0, psurvival=0.0):
@@ -308,6 +338,7 @@ def plot_disease_progression(grid):
     plt.ylabel('Percentage of population')
     plt.legend()
 
+
 def vaccine():
     isize, jsize = 30, 30
     nstep = 50
@@ -330,7 +361,6 @@ def vaccine():
         plt.title(f'Disease Evolution: Psurvival={psurvival}, Pbare={pbare}')
         plt.tight_layout()
         plt.show()
-
 
 
 def psurvival():
