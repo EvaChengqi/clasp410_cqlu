@@ -4,14 +4,11 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 plt.style.use("seaborn-v0_8")
 
-# Variables and Units
-# extent in km
+# Horizontal distance: km (1 grid cell = 1 km)
+# Iceberg height: meters (m)
+# Time step: years
+# Melt rates: meters per year (m/year)
 
-# melt rates in meters per day
-# L_BULK = 0.1    # meters/day
-# L_ENV  = 0.05   # meters/day
-# O_BULK = 0.3    # meters/day
-# O_ENV  = 0.2    # meters/day
 
 def initialize_iceberg(nx=200, init_width=25, min_h=98.0, max_h=164.0, source_idx=0):
     '''
@@ -135,7 +132,7 @@ def get_loss(h_array, t, base_O_ENV, L_BULK = 0.005, L_ENV  = 0.01, O_BULK = 0.0
         ocean_bulk_loss = O_BULK * h_array[ocean_slice]
         ocean_env_loss = O_ENV
         loss_array[ocean_slice] = ocean_bulk_loss + ocean_env_loss
-        
+
     loss_array[h_array < 1e-6] = 0
     return loss_array
 
