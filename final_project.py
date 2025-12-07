@@ -280,3 +280,51 @@ def compare():
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+
+def simple():
+    ext_simple = simulate_extent(nt=500, mode='simple')
+    times = np.arange(500) * 0.5  # dt = 0.5 years
+
+    plt.figure(figsize=(10,5))
+    plt.plot(times, ext_simple, label="Simple Melt Model")
+    plt.xlabel("Time (years)")
+    plt.ylabel("Iceberg Extent (km)")
+    plt.title("Comparison of Iceberg Extent Under Different Melt Models")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+def witht():
+    ext_simple = simulate_extent(nt=500, mode='simple')
+    ext_witht  = simulate_extent(nt=500, mode='witht')
+    times = np.arange(500) * 0.5  # dt = 0.5 years
+
+    plt.figure(figsize=(10,5))
+    plt.plot(times, ext_simple, label="Simple Melt Model")
+    plt.plot(times, ext_witht, label="Temp-Dependent Melt (Linear T)")
+    plt.xlabel("Time (years)")
+    plt.ylabel("Iceberg Extent (km)")
+    plt.title("Comparison of Iceberg Extent Under Different Melt Models")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+def real():
+    ext_simple = simulate_extent(nt=500, mode='simple')
+    ext_witht  = simulate_extent(nt=500, mode='witht')
+    ext_reality  = simulate_extent(nt=500, mode='reality')
+
+    times = np.arange(500) * 0.5  # dt = 0.5 years
+
+    plt.figure(figsize=(10,5))
+    plt.plot(times, ext_simple, label="Simple Melt Model")
+    plt.plot(times, ext_witht, label="Temp-Dependent Melt (Linear T)")
+    plt.plot(times, ext_reality, label="Seasonal + Warming Melt")
+    plt.xlabel("Time (years)")
+    plt.ylabel("Iceberg Extent (km)")
+    plt.title("Comparison of Iceberg Extent Under Different Melt Models")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
