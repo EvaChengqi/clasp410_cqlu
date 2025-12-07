@@ -12,13 +12,11 @@ plt.style.use("seaborn-v0_8")
 
 def initialize_iceberg(nx=200, init_width=25, min_h=98.0, max_h=164.0, source_idx=0):
     '''
-    Docstring for initialize_iceberg
-    
-    nx: number of columns, counts 
-    init_width: Initial iceberg width in columns, 
-    min_h: Minimum height of the iceberg in km
-    max_h: Maximum height of the iceberg in km
-    source_idx: Index where the iceberg “source” starts, position 
+    nx: number of columns (1 column = 1 km)
+    init_width: Initial iceberg width in km
+    min_h: Minimum iceberg height in meters (m)
+    max_h: Maximum iceberg height in meters (m)
+    source_idx: Source position in km (grid index)
     '''
     iceberg = np.zeros(nx)
     
@@ -33,19 +31,12 @@ def initialize_iceberg(nx=200, init_width=25, min_h=98.0, max_h=164.0, source_id
 
 def update_iceberg(h, u=1, min_h=98.0, max_h=164.0, source_idx=0, l_default=0.5):
     '''
-    Docstring for update_iceberg
-    
-     h: meters 
-        Array of iceberg column heights at the current time step
-     u: km
-        number of columns
-     min_h: meters
-        Minimum height for newly added iceberg block at the source
-     max_h: meters
-        Maximum height for newly added iceberg block at the source
-     source_idx: km
-        Column index where new ice is added
-     l_default: meters per time step (year)
+    h: Iceberg height array [m]
+    u: Drift speed in grid cells per year (≈ km/year)
+    min_h: Minimum injected block height [m]
+    max_h: Maximum injected block height [m]
+    source_idx: Source index [km]
+    l_default: Melt per time step [m/year]
     '''
     h[u:] = h[:-u]
     
